@@ -1,7 +1,7 @@
 #include "q1.h"
-#include "./helper.c"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* function will display the primary user interface
     This is already done for you*/
@@ -56,7 +56,7 @@ struct car * insert_to_list(struct car ** head, char plate[], int mileage, int r
 void print_list(struct car *head){
     if(head == NULL){
         printf("List is empty\n");  
-        return -1;
+        return;
     }
     struct car * temp = head;
     while(temp != NULL){
@@ -113,10 +113,10 @@ void swap(struct car *a, struct car *b){
     b->mileage = tempMileage;
 
     // swap the return date
-    char tempReturnDate[20];
-    strcpy(tempReturnDate, a->return_date);
-    strcpy(a->return_date, b->return_date);
-    strcpy(b->return_date, tempReturnDate);
+    int tempReturnDate = a->return_date;
+    a->return_date = b->return_date;
+    b->return_date = tempReturnDate;
+
 
 }
 
@@ -129,7 +129,7 @@ void swap(struct car *a, struct car *b){
 void sort_list(struct car ** head, bool sort_by_mileage, bool sort_by_return_date){
     if(*head == NULL){
         printf("List is empty\n");
-        return -1;
+        return;
     }
     // sort by mileage with the car having the least miles at the front of the list
     if(sort_by_mileage){
@@ -244,6 +244,7 @@ double profit_calculator(int initial_mileage, int final_mileage){
     else {
         charge = 80.0 + (mileageDifference - 200) * 0.15;
     }
+    return charge;
 
 }
 
@@ -260,7 +261,7 @@ void write_list_to_file(char *filename, struct car *head){
     // check if the file was opened successfully
     if(file == NULL){
         printf("Error opening file\n");
-        return -1;
+        return;
     }
     // Define variables
     char plate[7];
@@ -292,7 +293,7 @@ void read_file_into_list(char *filename, struct car **head){
     // check if the file was opened successfully
     if(file == NULL){
         printf("Error opening file\n");
-        return -1;
+        return;
     }
     while(!feof(file)){
         // Define variables
@@ -329,7 +330,7 @@ void date(int date){
 void free_list(struct car ** head){
     if(*head == NULL){
         printf("List is empty\n");
-        return -1;
+        return;
     }
     struct car * temp = *head;
     struct car * next = NULL;

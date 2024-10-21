@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "q1.h"
+#include "./q1.h"
 // This function is used to get the index of the node
 struct car * helper(struct car * head, int nodeIndex){
     struct car * temp = head;

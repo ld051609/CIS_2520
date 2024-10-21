@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
 //Our Linked List Node
 struct car{
   char plate[7];
@@ -27,3 +26,6 @@ void write_list_to_file(char *filename, struct car *head);
 void read_file_into_list(char *filename, struct car **head);
 void date(int date);
 void free_list(struct car ** head);
+
+// Helper Functions
+struct car * helper(struct car * head, int nodeIndex);
