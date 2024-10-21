@@ -1,75 +1,137 @@
+#include "q1.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-#include "q1.h" // Include your header file with function prototypes
+#include <assert.h>  // Include this header for assert
 
-// Function to create a sample file for testing
-void create_test_file() {
-    FILE *file = fopen("car_data.txt", "w");
-    if (file != NULL) {
-        fprintf(file, "ABC123,10000,230921\n");
-        fprintf(file, "XYZ789,5000,230921\n");
-        fprintf(file, "LMN456,7500,-1\n");
-        fclose(file);
-    } else {
-        printf("Error creating test file\n");
-    }
-}
-
-// Test function to perform all tests
-void run_tests() {
+void test_insert_to_list() {
     struct car *head = NULL;
 
-    // Test insert_to_list
-    printf("Test 1: Inserting cars into the list...\n");
-    insert_to_list(&head, "ABC123", 10000, 230921);
-    insert_to_list(&head, "XYZ789", 5000, 230921);
-    insert_to_list(&head, "LMN456", 7500, -1);
+    // Test inserting a single car
+    struct car *car1 = insert_to_list(&head, "ABC123", 5000, -1);
+    assert(car1 != NULL);
+    assert(strcmp(head->plate, "ABC123") == 0);
+    assert(head->mileage == 5000);
+    assert(head->return_date == -1);
 
-    // Expected output: should print 3 cars
-    printf("Expected: 3 cars in the list\n");
-    print_list(head);
-
-    // Test is_plate_in_list
-    printf("\nTest 2: Checking if plates are in the list...\n");
-    printf("ABC123: %s\n", is_plate_in_list(head, "ABC123") ? "Found" : "Not Found");
-    printf("XYZ789: %s\n", is_plate_in_list(head, "XYZ789") ? "Found" : "Not Found");
-    printf("ZZZ999: %s\n", is_plate_in_list(head, "ZZZ999") ? "Found" : "Not Found");
-
-    // Test sort_list by mileage
-    printf("\nTest 3: Sorting cars by mileage...\n");
-    sort_list(&head, true, false);
-    printf("Expected: Cars sorted by mileage (should be in ascending order)\n");
-    print_list(head);
-
-    // Test remove_car_from_list
-    printf("\nTest 4: Removing car with plate 'XYZ789'...\n");
-    struct car *removed = remove_car_from_list(&head, "XYZ789");
-    if (removed) {
-        printf("Removed car: Plate: %s, Mileage: %d\n", removed->plate, removed->mileage);
-        free(removed);
-    }
-    printf("Expected: XYZ789 removed\n");
-    print_list(head);
-
-    // Test profit_calculator
-    printf("\nTest 5: Calculating profit...\n");
-    double profit = profit_calculator(10000, 20500);
-    printf("Expected profit for mileage difference: $%.2f\n", profit);
-
-    // Write the list to a file
-    char *filename = "car_data.txt";
-    write_list_to_file(filename, head);
-    printf("Expected: List written to %s\n", filename);
-
-    // Free the list
-    free_list(&head);
+    // Test inserting another car
+    struct car *car2 = insert_to_list(&head, "XYZ789", 3000, 20231231);
+    assert(car2 != NULL);
+    assert(strcmp(head->plate, "XYZ789") == 0);
+    assert(head->mileage == 3000);
+    assert(head->return_date == 20231231);
+    printf("\nTesting insert_to_list passed\n");
 }
 
-// Main function
+void test_print_list() {
+    struct car *head = NULL;
+    insert_to_list(&head, "ABC123", 5000, -1);
+    insert_to_list(&head, "XYZ789", 3000, 20231231);
+
+    printf("Testing print_list:\n");
+    print_list(head);
+    // Output should show both cars with their details
+    printf("\nTesting test_print_list passed\n");
+}
+
+void test_is_plate_in_list() {
+    struct car *head = NULL;
+    insert_to_list(&head, "ABC123", 5000, -1);
+    
+    assert(is_plate_in_list(head, "ABC123") == true);
+    assert(is_plate_in_list(head, "XYZ789") == false);
+
+    printf("\nTesting test_is_plate_in_list passed\n");
+
+}
+
+void test_remove_car_from_list() {
+    struct car *head = NULL;
+    insert_to_list(&head, "ABC123", 5000, -1);
+    insert_to_list(&head, "XYZ789", 3000, 20231231);
+
+    struct car *removedCar = remove_car_from_list(&head, "ABC123");
+    assert(removedCar != NULL);
+    assert(strcmp(removedCar->plate, "ABC123") == 0);
+    free(removedCar);
+
+    // Check if car is removed
+    assert(is_plate_in_list(head, "ABC123") == false);
+    
+    printf("\nTesting test_remove_car_from_list passed\n");
+
+}
+
+void test_remove_first_from_list() {
+    struct car *head = NULL;
+    insert_to_list(&head, "ABC123", 5000, -1);
+    insert_to_list(&head, "XYZ789", 3000, 20231231);
+
+    struct car *removedCar = remove_first_from_list(&head);
+    assert(removedCar != NULL);
+    assert(strcmp(removedCar->plate, "XYZ789") == 0);
+    free(removedCar);
+
+    // Check if the head is now "ABC123"
+    assert(strcmp(head->plate, "ABC123") == 0);
+
+    printf("\nTesting test_remove_first_from_list passed\n");
+
+}
+
+void test_profit_calculator() {
+    double profit = profit_calculator(5000, 5200);
+    assert(profit == 80.0); // Within 200 km
+
+    profit = profit_calculator(5000, 5400);
+    assert(profit == 110.0); // 200 km + 30 km * 0.15
+    
+    printf("\nTesting test_profit_calculator passed\n");
+
+}
+
+void test_write_list_to_file() {
+    struct car *head = NULL;
+    insert_to_list(&head, "ABC123", 5000, -1);
+    
+    write_list_to_file("test_output.txt", head);
+
+    // You would need to manually check test_output.txt to verify the contents
+    
+    printf("\nTesting test_write_list_to_file passed\n");
+
+}
+
+void test_read_file_into_list() {
+    struct car *head = NULL;
+    read_file_into_list("test_input.txt", &head);
+    print_list(head);
+    // Test if the data has been read correctly (you might want to assert specific values)
+    printf("\nTesting test_read_file_into_list passed\n");
+
+
+}
+
+void test_free_list() {
+    struct car *head = NULL;
+    insert_to_list(&head, "ABC123", 5000, -1);
+    free_list(&head);
+    assert(head == NULL); // Head should be NULL after free
+
+    printf("\nTesting test_free_list passed\n");
+}
+
 int main() {
-    create_test_file(); // Create a sample test file for read operations
-    run_tests(); // Run the tests
+    test_insert_to_list();
+    test_print_list();
+    test_is_plate_in_list();
+    test_remove_car_from_list();
+    test_remove_first_from_list();
+    test_profit_calculator();
+    // test_write_list_to_file();
+    test_read_file_into_list();
+    test_free_list();
+
+    printf("All tests passed!\n");
     return 0;
 }

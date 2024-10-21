@@ -60,7 +60,7 @@ void print_list(struct car *head){
     }
     struct car * temp = head;
     while(temp != NULL){
-        printf("Plate: %s\n, Mileage: %d\n", temp->plate, temp->mileage);
+        printf("Plate: %s\nMileage: %d\n", temp->plate, temp->mileage);
         if(temp->return_date != -1){
             printf("Return Date: ");
             date(temp->return_date);
@@ -295,16 +295,18 @@ void read_file_into_list(char *filename, struct car **head){
         printf("Error opening file\n");
         return;
     }
+    // Define variables
+    char plate[7];
+    int mileage;
+    int return_date;
     while(!feof(file)){
-        // Define variables
-        char plate[7];
-        int mileage;
-        int return_date;
         // Read the data from the file
-        fscanf(file, "%s,%d,%d\n", plate, &mileage, &return_date);
+        fscanf(file, "%6s,%d,%d\n", plate, &mileage, &return_date);
         // Insert the car into the list
         insert_to_list(head, plate, mileage, return_date);
     }
+
+ 
 
     // Close the file
     fclose(file);
