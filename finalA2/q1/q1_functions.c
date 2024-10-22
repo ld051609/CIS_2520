@@ -26,6 +26,27 @@ void prompt(){
  * @return Pointer to the newly added car in the list.
  */
 struct car * insert_to_list(struct car ** head, char plate[], int mileage, int return_date){
+    // Check if mileage is valid
+    if (mileage < 0){
+        printf("Invalid mileage input\n");
+        return NULL;
+    }
+    // Check if the plate is valid
+    if (!is_plate_valid(plate)){
+        printf("Plate number is already in the list\n");
+        return NULL;
+    }
+    // length of 2-8 characters with only numbers and letters (capitalization does not matter).
+    if(check_plate_format(plate) == false){
+        printf("Invalid plate format\n");
+        return NULL;
+    } 
+    // Check if the plate is duplicated or not
+    if(is_plate_in_list(*head, plate) == true){
+        printf("Plate number is already in the list\n");
+        return NULL;
+    }
+    
     // Create a new node
     struct car * newCar = (struct car *)malloc(sizeof(struct car));
     if(newCar == NULL){
@@ -84,7 +105,7 @@ bool is_plate_in_list(struct car * head, char plate[]){
     struct car * tempHead = head;
     while(tempHead != NULL){
         // check if the 2 plates are the same
-        if(strcmp(tempHead->plate, plate) == 0){
+        if(strcasecmp(tempHead->plate, plate) == 0){
             return true;
         }
         // move to the next car
@@ -187,6 +208,11 @@ void sort_list(struct car ** head, bool sort_by_mileage, bool sort_by_return_dat
  * @return Pointer to the removed car.
  */
 struct car * remove_car_from_list(struct car **head, char plate[]){
+    // Check plate is valid with only numbers and letters (capitalization does not matter).
+    if (check_plate_format(plate) == false){
+        printf("Invalid plate format\n");
+        return NULL;
+    }
     if(*head == NULL){
         printf("List is empty\n");
         return NULL;
@@ -208,6 +234,7 @@ struct car * remove_car_from_list(struct car **head, char plate[]){
         prev = tempHead;
         tempHead = tempHead->next;
     }
+    printf("Plate not found in the list\n");
     return NULL;
 }
 

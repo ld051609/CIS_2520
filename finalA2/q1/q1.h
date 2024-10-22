@@ -29,3 +29,5 @@ void free_list(struct car ** head);
 
 // Helper Functions
 struct car * helper(struct car * head, int nodeIndex);
+bool check_plate_format(char plate[]);
+bool check_date_valid(int date);
