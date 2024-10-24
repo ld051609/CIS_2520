@@ -26,26 +26,7 @@ void prompt(){
  * @return Pointer to the newly added car in the list.
  */
 struct car * insert_to_list(struct car ** head, char plate[], int mileage, int return_date){
-    // Check if mileage is valid
-    if (mileage < 0){
-        printf("Invalid mileage input\n");
-        return NULL;
-    }
-    // Check if the plate is valid
-    if (!is_plate_valid(plate)){
-        printf("Plate number is already in the list\n");
-        return NULL;
-    }
-    // length of 2-8 characters with only numbers and letters (capitalization does not matter).
-    if(check_plate_format(plate) == false){
-        printf("Invalid plate format\n");
-        return NULL;
-    } 
-    // Check if the plate is duplicated or not
-    if(is_plate_in_list(*head, plate) == true){
-        printf("Plate number is already in the list\n");
-        return NULL;
-    }
+
     
     // Create a new node
     struct car * newCar = (struct car *)malloc(sizeof(struct car));
@@ -76,7 +57,7 @@ struct car * insert_to_list(struct car ** head, char plate[], int mileage, int r
  */
 void print_list(struct car *head){
     if(head == NULL){
-        printf("List is empty\n");  
+        printf("List is empty so cannot print\n");  
         return;
     }
     struct car * temp = head;
@@ -99,7 +80,6 @@ void print_list(struct car *head){
  */
 bool is_plate_in_list(struct car * head, char plate[]){
     if(head == NULL){
-        printf("List is empty\n");
         return false;
     }
     struct car * tempHead = head;
@@ -149,7 +129,6 @@ void swap(struct car *a, struct car *b){
  */
 void sort_list(struct car ** head, bool sort_by_mileage, bool sort_by_return_date){
     if(*head == NULL){
-        printf("List is empty\n");
         return;
     }
     // sort by mileage with the car having the least miles at the front of the list
@@ -160,7 +139,6 @@ void sort_list(struct car ** head, bool sort_by_mileage, bool sort_by_return_dat
             counter++;
             temp = temp->next;
         }
-        free(temp);
 
         // bubble sort 
         for (int i = 0; i < counter; i++){
@@ -183,7 +161,6 @@ void sort_list(struct car ** head, bool sort_by_mileage, bool sort_by_return_dat
             counter++;
             temp = temp->next;
         }
-        free(temp);
 
         // bubble sort 
         for (int i = 0; i < counter; i++){
@@ -208,20 +185,16 @@ void sort_list(struct car ** head, bool sort_by_mileage, bool sort_by_return_dat
  * @return Pointer to the removed car.
  */
 struct car * remove_car_from_list(struct car **head, char plate[]){
-    // Check plate is valid with only numbers and letters (capitalization does not matter).
-    if (check_plate_format(plate) == false){
-        printf("Invalid plate format\n");
-        return NULL;
-    }
+
     if(*head == NULL){
-        printf("List is empty\n");
+        printf("List is empty so cannot remove a car from list\n");
         return NULL;
     }
     struct car * tempHead = *head;
     struct car * prev = NULL;
     while(tempHead != NULL){
         // check if the 2 plates are the same
-        if(strcmp(tempHead->plate, plate) == 0){
+        if(strcasecmp(tempHead->plate, plate) == 0){
             // remove the car from the list
             if(prev == NULL){
                 *head = tempHead->next;
@@ -245,7 +218,7 @@ struct car * remove_car_from_list(struct car **head, char plate[]){
  */
 struct car * remove_first_from_list(struct car **head){
     if(*head == NULL){
-        printf("List is empty\n");
+        printf("List is empty so cannot remove first car from list\n");
         return NULL;
     }
     struct car * temp = *head;
@@ -290,6 +263,7 @@ void write_list_to_file(char *filename, struct car *head){
         printf("Error opening file\n");
         return;
     }
+
     // Define variables
     char plate[7];
     int mileage;
@@ -322,6 +296,7 @@ void read_file_into_list(char *filename, struct car **head){
         printf("Error opening file\n");
         return;
     }
+
     // Define variables
     char plate[7];
     int mileage;
@@ -358,7 +333,6 @@ void date(int date){
  */
 void free_list(struct car ** head){
     if(*head == NULL){
-        printf("List is empty\n");
         return;
     }
     struct car * temp = *head;

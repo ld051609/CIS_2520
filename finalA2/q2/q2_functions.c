@@ -54,5 +54,7 @@ void print(Operand *stack){
     printf("%lf\n", temp->value); //print the value of the node
     temp = temp->next; //move to the next node
   }
+
+  
   
 }

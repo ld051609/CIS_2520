@@ -14,6 +14,7 @@ int main(){
     int choice;
 
     // starting the program with reading the data from the three files
+    // TODO: uncomment later on
     read_file_into_list("available.txt", &available_head);
     read_file_into_list("rented.txt", &rented_head);
     read_file_into_list("repair.txt", &repair_head);
@@ -21,8 +22,6 @@ int main(){
     do
     {
         prompt();
-
-        printf("Enter a Choice: ");
         scanf("%d", &choice);
         
         /*
@@ -43,13 +42,30 @@ int main(){
             int mileage;
             printf("Enter Plate: ");
             scanf("%s", plate);
+            // length of 2-8 characters with only numbers and letters (capitalization does not matter).
+            if(!check_plate_format(plate)){
+                printf("Invalid plate format\n");
+                break;
+            } 
+            // Check if the plate is duplicated or not
+            if(is_plate_in_list(available_head, plate) == true){
+                printf("Plate number is already in the list\n");
+                break;
+            }
             printf("Enter Mileage: ");
             scanf("%d", &mileage);
+            // Check if mileage is valid
+            if (mileage < 0){
+                printf("Invalid mileage input\n");
+                break;
+            }
             // 2. Inserting the car into the available-for-rent list
             insert_to_list(&available_head, plate, mileage, -1);
+            printf("Car %s added to the available-for-rent list\n", plate);
             // 3. Sorting the available-for-rent list
             sort_list(&available_head, true, false);
             break;
+
         /* add a returned car to the available-for-rent list (the rented list needs to be updated as well, and you may view it as transferring the car from the rented to the available-for-rent)*/
         case 2:
             printf("Adding a returned car from the rented list to the available-for-rent list\n");
@@ -58,11 +74,26 @@ int main(){
             int mileage2;
             printf("Enter Plate: ");
             scanf("%s", plate2);
+                // Check plate is valid with only numbers and letters (capitalization does not matter).
+            if (!check_plate_format(plate)){
+                printf("Invalid plate format\n");
+                break;
+            }
             printf("Enter Mileage: ");
             scanf("%d", &mileage2);
-            
+            // Check if mileage is valid
+            if (mileage2 < 0){
+                printf("Invalid mileage input\n");
+                break;
+            }
+    
             // 2. Removing the car from the rented list with the given plate number
             struct car *car = remove_car_from_list(&rented_head, plate2);
+            if(car == NULL)
+            {
+                printf("Failed to remove the car.\n");
+                break;
+            }
             // Check that when returning the car, the current total mileage should be larger than the previous stored mileage of this car.
             if (mileage2 < car->mileage)
             {
@@ -71,7 +102,8 @@ int main(){
                 break;
             }
             // 3. Inserting the car into the available-for-rent list
-            insert_to_list(&available_head, car->plate, car->mileage, -1);
+            insert_to_list(&available_head, car->plate, mileage2, -1);
+            printf("Car %s added to the available-for-rent list from the rented list\n", car->plate);
             // 4. Compute the charge and print
             double charge = profit_calculator(car->mileage, mileage2);
             printf("The charge for the car is: $%.2f\n", charge);
@@ -88,10 +120,25 @@ int main(){
             int mileage3;
             printf("Enter Plate: ");
             scanf("%s", plate3);
+            // length of 2-8 characters with only numbers and letters (capitalization does not matter).
+            if(!check_plate_format(plate)){
+                printf("Invalid plate format\n");
+                break;
+            } 
             printf("Enter Mileage: ");
             scanf("%d", &mileage3);
+            if(mileage3 < 0)
+            {
+                printf("Invalid mileage input\n");
+                break;
+            }
             // 2. Removing the car from the rented list
             struct car *car2 = remove_car_from_list(&rented_head, plate3);
+            if(car2 == NULL)
+            {
+                printf("Failed to remove the car.\n");
+                break;
+            }
             // Check that when returning the car, the current total mileage should be larger than the previous stored mileage of this car.
             if(mileage3 < car2->mileage)
             {
@@ -100,7 +147,8 @@ int main(){
                 break;
             }
             // 3. Inserting the car into the in-repair list
-            insert_to_list(&repair_head, car2->plate, car2->mileage, -1);
+            insert_to_list(&repair_head, car2->plate, mileage3, -1);
+            printf("Car %s added to the in-repair list from the rented list\n", car2->plate);
             // 4. Compute the charge and print
             double charge2 = profit_calculator(car2->mileage, mileage3);
             printf("The charge for the car is: $%.2f\n", charge2);
@@ -116,11 +164,21 @@ int main(){
             char plate4[7];
             printf("Enter Plate: ");
             scanf("%s", plate4);
+            // length of 2-8 characters with only numbers and letters (capitalization does not matter).
+            if(!check_plate_format(plate)){
+                printf("Invalid plate format\n");
+                break;
+            } 
             // 2. Removing the car from the rented list 
             struct car *car3 = remove_car_from_list(&repair_head, plate4);
+            if(car3 == NULL)
+            {
+                printf("Failed to remove the car.\n");
+                break;
+            }
             // 3. Inserting the car into the available-for-rent list
             insert_to_list(&available_head, car3->plate, car3->mileage, -1);
-            
+            printf("Car %s added to the available-for-rent list from the in-repair list\n", car3->plate);
             // Sorting the rented list and available-for-rent list
             sort_list(&available_head, true, false);
             sort_list(&rented_head, false, true);
@@ -147,16 +205,21 @@ int main(){
             }
             // 3. Removing the first car from the available-for-rent list
             struct car *car4 = remove_first_from_list(&available_head);
+            if(car4 == NULL)
+            {
+                printf("Failed to remove the car.\n");
+                break;
+            }
             // 4. Inserting the car into the rented list
             insert_to_list(&rented_head, car4->plate, car4->mileage, return_date);
-
+            printf("Car %s rented from the available-for-rent list\n", car4->plate);
             // Sorting the rented list and available-for-rent list
             sort_list(&available_head, true, false);
             sort_list(&rented_head, false, true);
             break;
         /* print all the lists */
         case 6:
-            printf("Available-for-Rent List:\n");
+            printf("Available-for-Rent List:\n\n");
             sort_list(&available_head, true, false);
             print_list(available_head);
             printf("Rented List:\n");
@@ -168,6 +231,7 @@ int main(){
         /* exit the program */
         case 7:
             // store the data in the three lists into the three relevant text files (available.txt, rented.txt, repair.txt)
+            // TODO: uncomment later on
             write_list_to_file("available.txt", available_head); 
             write_list_to_file("rented.txt", rented_head);
             write_list_to_file("repair.txt", repair_head);
@@ -183,7 +247,7 @@ int main(){
             break;
         }
         
-    } while (true);
+    } while (choice != 7);
     
 
     return 0;

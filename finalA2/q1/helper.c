@@ -22,8 +22,10 @@ bool check_plate_format(char plate[]){
     }
     // Check if the plate contains only letters and numbers
     for(int i = 0; i < strlen(plate); i++){
-        if(!((plate[i] >= '0' && plate[i] <= '9') || (plate[i] >= 'A' && plate[i] <= 'Z') || (plate[i] >= 'a' && plate[i] <= 'z'))){
-            return false;
+        if (!((plate[i] >= '0' && plate[i] <= '9') || 
+              (plate[i] >= 'A' && plate[i] <= 'Z') || 
+              (plate[i] >= 'a' && plate[i] <= 'z'))) {
+                return false;
         }
     }
     return true;
@@ -47,7 +49,7 @@ bool check_date_valid(int date){
         days_in_month = 30;
         break;
     case 2:
-        if(year % 4 == 0 && year % 100 != 0 || year % 400 == 0){
+        if((year % 4 == 0 && year % 100 != 0) ||(year % 400 == 0) ){
             days_in_month = 29;
         }else{
             days_in_month = 28;
@@ -59,8 +61,6 @@ bool check_date_valid(int date){
     if(day < 1 || day > days_in_month){
         return false;
     }
-    if(year > 2024){
-        return false;
-    }
+
     return true;
 }

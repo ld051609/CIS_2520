@@ -48,7 +48,13 @@ int main(int argc, char** argv){
     }
   }
   printf("The result is: %.2f\n", pop(&stack));
-  
+
+  // Free the memory of the stack
+  while(stack != NULL){
+    Operand *temp = stack;
+    stack = stack->next;
+    free(temp);
+  }
   
 
   return 0;
