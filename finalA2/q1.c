@@ -112,6 +112,8 @@ int main(){
             // Sorting the available-for-rent list and rented list
             sort_list(&available_head, true, false);
             sort_list(&rented_head, false, true);
+            // TODO
+            free(car);
             break;
         /* add a returned car to the in-repair list (may view as transferring the car from the rented to the in-repair) */
         case 3:
@@ -157,6 +159,8 @@ int main(){
             // Sorting the rented list and available-for-rent list
             sort_list(&available_head, true, false);
             sort_list(&rented_head, false, true);
+            // TODO: 
+            free(car2);
             break;
         /* transfer a car from the in-repair list to the available-for-rent list */
         case 4:
@@ -183,6 +187,8 @@ int main(){
             // Sorting the rented list and available-for-rent list
             sort_list(&available_head, true, false);
             sort_list(&rented_head, false, true);
+            // TODO:
+            free(car3);
             break;
         /* rent the first available car (may view as transferring the car from the available-for-rent to the rented) */
         case 5:
@@ -217,6 +223,8 @@ int main(){
             // Sorting the rented list and available-for-rent list
             sort_list(&available_head, true, false);
             sort_list(&rented_head, false, true);
+            // TODO
+            free(car4);
             break;
         /* print all the lists */
         case 6:

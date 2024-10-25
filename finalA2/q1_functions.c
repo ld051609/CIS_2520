@@ -71,6 +71,8 @@ void print_list(struct car *head){
         printf("\n");
         temp = temp->next;
     }
+    // TODO
+    free(temp);
 }
 
 /**
@@ -92,7 +94,8 @@ bool is_plate_in_list(struct car * head, char plate[]){
         // move to the next car
         tempHead = tempHead->next;
     }
-
+    // TODO: free
+    free(tempHead);
     return false;
 }
 
@@ -153,6 +156,8 @@ void sort_list(struct car ** head, bool sort_by_mileage, bool sort_by_return_dat
                 }
             }
         }
+    // TODO
+    free(temp);
     }
     // with the first car on this list having the earliest expected return date
     if(sort_by_return_date){
@@ -175,6 +180,8 @@ void sort_list(struct car ** head, bool sort_by_mileage, bool sort_by_return_dat
                 }
             }
         }
+    // TODO
+    free(temp);
     }
     return;
 }
@@ -209,6 +216,9 @@ struct car * remove_car_from_list(struct car **head, char plate[]){
         tempHead = tempHead->next;
     }
     printf("Plate not found in the list\n");
+    // TODO
+    free(prev);
+    free(tempHead);
     return NULL;
 }
 
@@ -281,6 +291,8 @@ void write_list_to_file(char *filename, struct car *head){
     }
     // close the file
     fclose(file);
+    // TODO:
+    free(temp);
 }
 
 /**
