@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <strings.h>
 /* function will display the primary user interface
     This is already done for you*/
 void prompt(){
@@ -47,6 +47,7 @@ struct car * insert_to_list(struct car ** head, char plate[], int mileage, int r
         newCar->next = *head;
         *head = newCar;
     }  
+    // TODO: 
     return newCar;
 }
 
@@ -257,7 +258,7 @@ double profit_calculator(int initial_mileage, int final_mileage){
  */
 void write_list_to_file(char *filename, struct car *head){
     // open the file 
-    FILE * file = fopen(filename, "a");
+    FILE * file = fopen(filename, "w");
     // check if the file was opened successfully
     if(file == NULL){
         printf("Error opening file\n");
@@ -271,10 +272,11 @@ void write_list_to_file(char *filename, struct car *head){
 
     struct car * temp = head;
     while(temp != NULL){
+        temp->plate[6] = '\0';
         strcpy(plate, temp->plate);
         mileage = temp->mileage;
         return_date = temp->return_date;
-        fprintf(file, "\n%s,%d,%d\n", plate, mileage, return_date);
+        fprintf(file, "%s,%d,%d\n", plate, mileage, return_date);
         temp = temp->next;
     }
     // close the file
@@ -306,8 +308,9 @@ void read_file_into_list(char *filename, struct car **head){
     while(!feof(file)){
         // Read the data from the file
         fscanf(file, " %7[^,],%d,%d\n", plate, &mileage, &return_date);
+        plate[6] = '\0';
         // Insert the car into the list
-        // insert_to_list(head, plate, mileage, return_date);
+        insert_to_list(head, plate, mileage, return_date);
     }
 
  

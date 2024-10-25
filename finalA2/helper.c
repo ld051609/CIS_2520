@@ -18,6 +18,7 @@ struct car * helper(struct car * head, int nodeIndex){
 bool check_plate_format(char plate[]){
     // Check if the length of the plate is between 2 and 8
     if(strlen(plate) < 2 || strlen(plate) > 8){
+        printf("Text must be between 2-8 characterers. ");
         return false;
     }
     // Check if the plate contains only letters and numbers

@@ -72,10 +72,11 @@ int main(){
             // 1. Prompting the user for the car's plate and mileage
             char plate2[7];
             int mileage2;
+            
             printf("Enter Plate: ");
             scanf("%s", plate2);
                 // Check plate is valid with only numbers and letters (capitalization does not matter).
-            if (!check_plate_format(plate)){
+            if (!check_plate_format(plate2)){
                 printf("Invalid plate format\n");
                 break;
             }
@@ -121,7 +122,7 @@ int main(){
             printf("Enter Plate: ");
             scanf("%s", plate3);
             // length of 2-8 characters with only numbers and letters (capitalization does not matter).
-            if(!check_plate_format(plate)){
+            if(!check_plate_format(plate3)){
                 printf("Invalid plate format\n");
                 break;
             } 
@@ -165,7 +166,7 @@ int main(){
             printf("Enter Plate: ");
             scanf("%s", plate4);
             // length of 2-8 characters with only numbers and letters (capitalization does not matter).
-            if(!check_plate_format(plate)){
+            if(!check_plate_format(plate4)){
                 printf("Invalid plate format\n");
                 break;
             } 
