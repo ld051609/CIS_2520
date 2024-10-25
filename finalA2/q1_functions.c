@@ -257,7 +257,7 @@ double profit_calculator(int initial_mileage, int final_mileage){
  */
 void write_list_to_file(char *filename, struct car *head){
     // open the file 
-    FILE * file = fopen(filename, "w");
+    FILE * file = fopen(filename, "a");
     // check if the file was opened successfully
     if(file == NULL){
         printf("Error opening file\n");
@@ -274,7 +274,7 @@ void write_list_to_file(char *filename, struct car *head){
         strcpy(plate, temp->plate);
         mileage = temp->mileage;
         return_date = temp->return_date;
-        fprintf(file, "%s,%d,%d\n", plate, mileage, return_date);
+        fprintf(file, "\n%s,%d,%d\n", plate, mileage, return_date);
         temp = temp->next;
     }
     // close the file
@@ -298,14 +298,16 @@ void read_file_into_list(char *filename, struct car **head){
     }
 
     // Define variables
-    char plate[7];
+    char plate[10];
     int mileage;
     int return_date;
+
+
     while(!feof(file)){
         // Read the data from the file
-        fscanf(file, "%6s,%d,%d\n", plate, &mileage, &return_date);
+        fscanf(file, " %7[^,],%d,%d\n", plate, &mileage, &return_date);
         // Insert the car into the list
-        insert_to_list(head, plate, mileage, return_date);
+        // insert_to_list(head, plate, mileage, return_date);
     }
 
  

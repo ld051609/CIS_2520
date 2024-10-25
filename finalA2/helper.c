@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include "./q1.h"
-// This function is used to get the index of the node
+// This function is used to get the index of the node and this is getting from my previous cis2500 assignment
 struct car * helper(struct car * head, int nodeIndex){
     struct car * temp = head;
     int i = 0;
