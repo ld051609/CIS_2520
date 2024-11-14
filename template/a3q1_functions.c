@@ -191,8 +191,8 @@ void promptVariables(Node *root){
       varCount++;
     }
   }
-  // promptVariables(root->left);
-  // promptVariables(root->right);
+  promptVariables(root->left);
+  promptVariables(root->right);
 }
 
 // The calculate function calculates the expression and returns its result. Division by 0 and/or other error scenarios should be checked.
@@ -208,10 +208,13 @@ float calculate(Node *root){
   if(isdigit(root->data[0])){
     return atof(root->data);
   }
-  // 2. If the current node is a variable, return the value of the variable.
+  // 2. If the current node is a variable, then get the value of the variable from the variables array
   if(isalpha(root->data[0])){
-    promptVariables(root);  
-    return variables[varCount-1].value;
+    for(int i = 0; i < varCount; i++){
+      if(strcmp(variables[i].varName, root->data) == 0){
+        return variables[i].value;
+      }
+    }
   }
   // 3. If the current node is an operator, calculate the left and right subtrees and return the result of the operation.
   float left = calculate(root->left);
