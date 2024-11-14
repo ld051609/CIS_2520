@@ -32,5 +32,5 @@ float calculate(Node *root);
 // Helper functions
 Node* parseVariable(char *expr);
 Node* parseNumber(char *expr);
-
+int checkDivisionByZero(Node *root);
 #endif

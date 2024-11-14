@@ -23,7 +23,6 @@ int main(int argc, char *argv[]) {
 
     Node *root = parseExpression(expr);
 
-    
     int choice;
     do {
         printf("\nMenu:\n");

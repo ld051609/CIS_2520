@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "a3q1_header.h"
-
+#include <math.h> 
 
 Variable variables[10];
 int varCount = 0; 
@@ -64,7 +64,7 @@ Node* parseExpression(char *expr){
 				if(expr[varCount] == ')') {
 						printf("\n----- Found ')' at position %d -----\n", varCount);
 						varCount++; // Move to the next character
-						return currentSubtree;  
+						return currentSubtree;  // Return the current subtree immediately
 				}
 
         // Variable handling
@@ -85,7 +85,7 @@ Node* parseExpression(char *expr){
             continue;
         }
 
-        // Operator handling
+        // Operator handling: making sure that there exists a current subtree
         if(currentSubtree != NULL && (expr[varCount] == '+' || expr[varCount] == '-' || 
            expr[varCount] == '*' || expr[varCount] == '/')){
             printf("\n----- Processing Operator -----\n");
@@ -124,29 +124,104 @@ Node* parseExpression(char *expr){
 
 // The preOrder function prints tree nodes in preorder traversal.
 void preorder(Node *root){
-
-	
+  if (root == NULL) {
+    printf("Root is NULL\n");
+    return;
+  }
+  printf("%s ", root->data);
+  preorder(root->left);
+  preorder(root->right);
 }
 
 // The inOrder function prints tree nodes in inorder traversal fully parenthesized.
 void inorder(Node *root){
-
-
+  if(root == NULL){
+    printf("Root is NULL\n");
+    return;
+  }
+  // Add parentheses around the left subtree
+  if(root->left != NULL){
+    printf("( ");
+  }
+  inorder(root->left);
+  printf("%s ", root->data);
+  inorder(root->right);
+  // Add closing parentheses around the right subtree
+  if(root->right != NULL){
+    printf(" )");
+  }
 }
 
 // The postOrder function prints tree nodes in postorder traversal.
 void postorder(Node *root){
-
+  if(root == NULL){
+    printf("Root is NULL\n");
+    return;
+  }
+  postorder(root->left);
+  postorder(root->right);
+  printf("%s ", root->data);
 }
 
 // The promptVariables function prompts the user to assign values to each variable found in the expression tree. The values should be stored in the Variables struct.
 void promptVariables(Node *root){
-
+  int varExists = 0;
+  if(root == NULL){
+    return;
+  }
+  // Going over a tree, if the current node is a variable, prompt the user to assign a value to it
+  if(isalpha(root->data[0]) && varCount < 10){
+    // Check if the variable name with value already exists in the variables array
+    for(int i = 0; i < varCount; i++){
+      if(strcmp(variables[i].varName, root->data) == 0){
+        printf("Variable %s already exists\n", root->data);
+        varExists = 1;
+        return;
+      }
+    }
+    if(varExists == 0 && varCount < 10){
+      float float_value = 0.00; // Initialize float_value to 0.00 in case of undefined value
+      printf("Enter a float value for %s: ", root->data);
+      scanf("%f", &float_value);
+      // Round to 2 decimal places
+      float_value = roundf(float_value * 100) / 100;
+      // Store the value in the struct with its variable name
+      variables[varCount].value = float_value;
+      strcpy(variables[varCount].varName, root->data);
+      varCount++;
+    }
+  }
+  // promptVariables(root->left);
+  // promptVariables(root->right);
 }
 
 // The calculate function calculates the expression and returns its result. Division by 0 and/or other error scenarios should be checked.
 float calculate(Node *root){
-	return 0;
+  if(root == NULL) return 0;
+  // Check division by zero initially
+  if(checkDivisionByZero(root) == 1){
+    printf("Error: Division by zero\n");
+    return 0;
+  };
+  // Technique: 
+  // 1. If the current node is a number, return the number.
+  if(isdigit(root->data[0])){
+    return atof(root->data);
+  }
+  // 2. If the current node is a variable, return the value of the variable.
+  if(isalpha(root->data[0])){
+    promptVariables(root);  
+    return variables[varCount-1].value;
+  }
+  // 3. If the current node is an operator, calculate the left and right subtrees and return the result of the operation.
+  float left = calculate(root->left);
+  float right = calculate(root->right);
+  if(strcmp(root->data, "+") == 0) return left + right;
+  if(strcmp(root->data, "-") == 0) return left - right;
+  if(strcmp(root->data, "*") == 0) return left * right;
+  if(strcmp(root->data, "/") == 0) return left / right;
+
+
 }
 
 /*
@@ -180,4 +255,14 @@ Node* parseNumber(char *expr){
 	}
 	strncpy(num, expr+num_pos, length);
 	return createNode(num);
+}
+// Check if division by zero is possible for the whole tree
+int checkDivisionByZero(Node *root){
+  if(strcmp(root->data, "/") == 0 && root->right->data[0] == '0'){
+    return 1;
+  }
+  // Check left and right subtrees
+  if(root->left != NULL) checkDivisionByZero(root->left);
+  if(root->right != NULL) checkDivisionByZero(root->right);
+  return 0;
 }
