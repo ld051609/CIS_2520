@@ -19,26 +19,25 @@ void downHeap(int key[20], int pos, int array[20][10]){
   int leftChild = 2*pos + 1;
   int rightChild = 2*pos + 2;
 
-  // Check if the pos has children, if not then return cuz it's a leaf node
-  if(!isParent(pos)){
-    return;
+  // Check if the pos has children, if not then not proceed cuz it's a leaf node
+  if(isParent(pos)){
+    // If the left child is greater than the current node, then the largest node is the left child
+    if(leftChild < 20 && key[leftChild] > key[largestNode]){
+      largestNode = leftChild;
+    }
+
+    // If the right child is greater than the current node, then the largest node is the right child
+    if(rightChild < 20 && key[rightChild] > key[largestNode]){
+      largestNode = rightChild;
+    }
+
+    // If the largest node is not the current node, then the current node and the largest node are swapped
+    if(largestNode != pos){
+      swap(pos, largestNode, key, array);
+      downHeap(key, largestNode, array);
+    }
   }
 
-  // If the left child is greater than the current node, then the largest node is the left child
-  if(leftChild < 20 && key[leftChild] > key[largestNode]){
-    largestNode = leftChild;
-  }
-
-  // If the right child is greater than the current node, then the largest node is the right child
-  if(rightChild < 20 && key[rightChild] > key[largestNode]){
-    largestNode = rightChild;
-  }
-
-  // If the largest node is not the current node, then the current node and the largest node are swapped
-  if(largestNode != pos){
-    swap(pos, largestNode, key, array);
-    downHeap(key, largestNode, array);
-  }
 
 }
 
