@@ -44,7 +44,10 @@ void downHeap(int key[20], int pos, int array[20][10]){
 
 // The isParent function returns true if the passed position has a child or false if there's no child
 bool isParent(int keyPos){
-  if(keyPos >= 0 && keyPos <= 9){
+  // Check whether the keyPos has left child or right child or both
+  int leftChild = 2*keyPos + 1;
+  int rightChild = 2*keyPos + 2;
+  if(leftChild || rightChild){
     return true;
   }
 
