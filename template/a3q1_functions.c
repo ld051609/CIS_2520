@@ -125,7 +125,6 @@ Node* parseExpression(char *expr){
 // The preOrder function prints tree nodes in preorder traversal.
 void preorder(Node *root){
   if (root == NULL) {
-    printf("Root is NULL\n");
     return;
   }
   printf("%s ", root->data);
@@ -134,28 +133,25 @@ void preorder(Node *root){
 }
 
 // The inOrder function prints tree nodes in inorder traversal fully parenthesized.
+// Add paranthese around variable or number 
 void inorder(Node *root){
   if(root == NULL){
-    printf("Root is NULL\n");
     return;
   }
   // Add parentheses around the left subtree
-  if(root->left != NULL){
-    printf("( ");
-  }
+  printf("(");
+  
   inorder(root->left);
-  printf("%s ", root->data);
+  printf("%s", root->data);
   inorder(root->right);
   // Add closing parentheses around the right subtree
-  if(root->right != NULL){
-    printf(" )");
-  }
+  printf(")");
+  
 }
 
 // The postOrder function prints tree nodes in postorder traversal.
 void postorder(Node *root){
   if(root == NULL){
-    printf("Root is NULL\n");
     return;
   }
   postorder(root->left);
