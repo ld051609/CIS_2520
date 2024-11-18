@@ -33,63 +33,63 @@ Node* parseExpression(char *expr){
 		// 4. If the current character is an operator, create an operator node with the current character as data, and recursively call parseExpression to build the right subtrees.
 		// 5. If the current character is ')', return the current subtree
 		
-    printf("\n========== ENTER parseExpression ==========\n");
-    printf("Current position (varCount): %d\n", varCount);
-    printf("Processing: %s\n", expr + varCount);
+    // printf("\n========== ENTER parseExpression ==========\n");
+    // printf("Current position (varCount): %d\n", varCount);
+    // printf("Processing: %s\n", expr + varCount);
     
     Node* currentSubtree = NULL;  // Tracks the current subtree being built
 
     while(expr[varCount] != '\0'){
         // Parentheses handling 
         if(expr[varCount] == '('){
-            printf("\n----- Found '(' -----\n");
-            printf("Position: %d\n", varCount);
+            // printf("\n----- Found '(' -----\n");
+            // printf("Position: %d\n", varCount);
             varCount++; // Move to the next character
             
 						// Recursively call parseExpression to build the left subtree
             currentSubtree = parseExpression(expr);
             
 						// TODO: print the left subtree
-            printf("\n----- Parentheses Subtree Result -----\n");
-            if (currentSubtree == NULL) {
-                printf("Result: NULL subtree\n");
-            } else {
-                printf("Root: '%s'\n", currentSubtree->data);
-                printf("Left: '%s'\n", currentSubtree->left ? currentSubtree->left->data : "NULL");
-                printf("Right: '%s'\n", currentSubtree->right ? currentSubtree->right->data : "NULL");
-            }
+            // printf("\n----- Parentheses Subtree Result -----\n");
+            // if (currentSubtree == NULL) {
+            //     printf("Result: NULL subtree\n");
+            // } else {
+            //     printf("Root: '%s'\n", currentSubtree->data);
+            //     printf("Left: '%s'\n", currentSubtree->left ? currentSubtree->left->data : "NULL");
+            //     printf("Right: '%s'\n", currentSubtree->right ? currentSubtree->right->data : "NULL");
+            // }
             
         }
 				// If the current character is ')', return the current subtree
 				if(expr[varCount] == ')') {
-						printf("\n----- Found ')' at position %d -----\n", varCount);
+						// printf("\n----- Found ')' at position %d -----\n", varCount);
 						varCount++; // Move to the next character
 						return currentSubtree;  
 				}
 
         // Variable handling
         if(isalpha(expr[varCount])){
-            printf("\n----- Processing Variable -----\n");
-            printf("Starting at position: %d\n", varCount);
+            // printf("\n----- Processing Variable -----\n");
+            // printf("Starting at position: %d\n", varCount);
             currentSubtree = parseVariable(expr); // Build the node of the subtree
-            printf("Created variable node: '%s'\n", currentSubtree->data);
+            // printf("Created variable node: '%s'\n", currentSubtree->data);
             continue;
         }
 
         // Number handling
         if(isdigit(expr[varCount])){
-            printf("\n----- Processing Number -----\n");
-            printf("Starting at position: %d\n", varCount);
+            // printf("\n----- Processing Number -----\n");
+            // printf("Starting at position: %d\n", varCount);
             currentSubtree = parseNumber(expr); // Build the node of the subtree
-            printf("Created number node: '%s'\n", currentSubtree->data);
+            // printf("Created number node: '%s'\n", currentSubtree->data);
             continue;
         }
 
         // Operator handling: making sure that there exists a current subtree
         if(currentSubtree != NULL && (expr[varCount] == '+' || expr[varCount] == '-' || 
            expr[varCount] == '*' || expr[varCount] == '/')){
-            printf("\n----- Processing Operator -----\n");
-            printf("Found operator: '%c' at position %d\n", expr[varCount], varCount);
+            // printf("\n----- Processing Operator -----\n");
+            // printf("Found operator: '%c' at position %d\n", expr[varCount], varCount);
 						// Create an operator node with the current character as data
             char sign[2] = {expr[varCount], '\0'};
             varCount++; // Move to the next character
@@ -100,10 +100,10 @@ Node* parseExpression(char *expr){
             opNode->right = parseExpression(expr); // Recursively call parseExpression to build the right subtree
             
 						// TODO: print the operator node
-            printf("\n----- Operator Node Complete -----\n");
-            printf("Operator: '%s'\n", opNode->data);
-            printf("Left subtree root: '%s'\n", opNode->left->data);
-            printf("Right subtree root: '%s'\n", opNode->right->data);
+            // printf("\n----- Operator Node Complete -----\n");
+            // printf("Operator: '%s'\n", opNode->data);
+            // printf("Left subtree root: '%s'\n", opNode->left->data);
+            // printf("Right subtree root: '%s'\n", opNode->right->data);
             
             return opNode;
         }
@@ -111,12 +111,12 @@ Node* parseExpression(char *expr){
         varCount++; // Move to the next character
     }
 
-    printf("\n========== EXIT parseExpression ==========\n");
-    if (currentSubtree) {
-        printf("Returning subtree with root: '%s'\n", currentSubtree->data);
-    } else {
-        printf("Returning NULL\n");
-    }
+    // printf("\n========== EXIT parseExpression ==========\n");
+    // if (currentSubtree) {
+    //     printf("Returning subtree with root: '%s'\n", currentSubtree->data);
+    // } else {
+    //     printf("Returning NULL\n");
+    // }
     
     return currentSubtree;
 }
