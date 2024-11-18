@@ -249,7 +249,9 @@ Node* parseVariable(char *expr){
 		return NULL;
 	}
 	strncpy(var, expr+var_pos, length);
-	return createNode(var);
+  Node *varNode = createNode(var);
+  free(var);
+	return varNode;
 }
 
 Node* parseNumber(char *expr){
@@ -264,7 +266,9 @@ Node* parseNumber(char *expr){
 		return NULL;
 	}
 	strncpy(num, expr+num_pos, length);
-	return createNode(num);
+  Node *numNode = createNode(num);
+  free(num);
+	return numNode;
 }
 int checkDivisionByZero(Node *root){
   if(strcmp(root->data, "/") == 0 && root->right->data[0] == '0') return 1;
@@ -274,3 +278,11 @@ int checkDivisionByZero(Node *root){
   if (root->right != NULL) checkDivisionByZero(root->right);
   return 0;
 }
+// Free the memory allocated for the tree
+void freeTree(Node *root){
+  if(root == NULL) return;
+  freeTree(root->left);
+  freeTree(root->right);
+  free(root);
+}
+// End of a3q1_functions.c

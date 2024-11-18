@@ -33,4 +33,5 @@ float calculate(Node *root);
 Node* parseVariable(char *expr);
 Node* parseNumber(char *expr);
 int checkDivisionByZero(Node *root);
+void freeTree(Node *root);
 #endif

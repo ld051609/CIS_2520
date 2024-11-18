@@ -44,7 +44,9 @@ int main(int argc, char *argv[]) {
                 promptVariables(root);
                 printf("Result: %.2f\n", calculate(root));
                 break;
-            case 5: break;
+            case 5: 
+                freeTree(root);
+                break;
             default: printf("Please enter a valid choice.\n");
         }
     } while (choice != 5);
