@@ -189,15 +189,19 @@ void promptVariables(Node *root){
 
 // The calculate function calculates the expression and returns its result. Division by 0 and/or other error scenarios should be checked.
 float calculate(Node *root){
+  // Add a static flag to track division by zero error
+  int divisionByZeroErrorVar = 0;
+  
   if(root == NULL){
-    return 0;
+    return 0.00;
   }
-  // Technique: 
-  // 1. If the current node is a number, return the number.
+
+  // If the current node is a number
   if(isdigit(root->data[0])){
     return atof(root->data);
   }
-  // 2. If the current node is a variable, return the value of the variable.
+
+  // If the current node is a variable
   if(isalpha(root->data[0])){
     for(int i = 0; i < varCount; i++){
       if(strcmp(variables[i].varName, root->data) == 0){
@@ -205,12 +209,29 @@ float calculate(Node *root){
       }
     }
   }
-  // 3. If the current node is an operator, calculate the left and right subtrees and return the result.
-  if(strcmp(root->data, "+") == 0 || strcmp(root->data, "-") == 0 || strcmp(root->data, "*") == 0 || strcmp(root->data, "/") == 0){
-    
+
+  float left = calculate(root->left);
+  float right = calculate(root->right);
+
+  // Check for division by zero before performing operations
+  if(strcmp(root->data, "/") == 0 && right == 0){
+    printf("ERROR - Division by zero!\n");
+    divisionByZeroErrorVar = 1;
+    return 0.00;
   }
 
-	return 0;
+  // If division by zero was detected in a sub-calculation, propagate the error
+  if(divisionByZeroErrorVar){
+    return 0.00;
+  }
+
+  // Perform the operations
+  if(strcmp(root->data, "+") == 0) return left + right;
+  if(strcmp(root->data, "-") == 0) return left - right;
+  if(strcmp(root->data, "*") == 0) return left * right;
+  if(strcmp(root->data, "/") == 0) return left / right;
+
+  return 0.00;
 }
 
 /*
@@ -244,4 +265,12 @@ Node* parseNumber(char *expr){
 	}
 	strncpy(num, expr+num_pos, length);
 	return createNode(num);
+}
+int checkDivisionByZero(Node *root){
+  if(strcmp(root->data, "/") == 0 && root->right->data[0] == '0') return 1;
+  return 1;
+
+  if (root->left != NULL) checkDivisionByZero(root->left);
+  if (root->right != NULL) checkDivisionByZero(root->right);
+  return 0;
 }
