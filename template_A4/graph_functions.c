@@ -20,8 +20,43 @@ void prompt(void)
  */
 Graph *readGraph(const char *filename)
 {
-    // Implement the function logic here
-    return NULL;
+    // Read the file
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        printf("Error opening file: %s\n", filename);
+        return NULL;
+    }
+    // Read the number of vertices by reading how many lines there are in the file
+    int numVertices = getNumVertices(filename);
+    if (numVertices == -1)
+    {
+        printf("Error getting number of vertices.\n");
+        fclose(file);
+        return NULL;
+    }
+
+    // Create the graph
+    Graph *graph = (Graph *)malloc(sizeof(Graph));
+    if(!graph){
+        printf("Memory allocation failed for graph.\n");
+        fclose(file);
+        return NULL;
+    }
+    graph->numVertices = numVertices;
+
+    // Initialize the adjacency matrix and the adjacency list
+    for (int i = 0; i < numVertices; i++)
+    {
+        for (int j = 0; j < numVertices; j++)
+        {
+            graph->adjMatrix[i][j] = 0;
+        }
+        graph->adjList[i] = NULL;
+    }
+
+    fclose(file);
+    return graph;
 }
 
 /**
@@ -32,7 +67,14 @@ Graph *readGraph(const char *filename)
 Node *createNode(int vertex)
 {
     // Implement the function logic here
-    return NULL;
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    if(!newNode){
+        printf("Memory allocation failed for node.\n");
+        return NULL;
+    }
+    newNode->vertex = vertex;
+    newNode->next = NULL;
+    return newNode;
 }
 
 /**
@@ -41,7 +83,17 @@ Node *createNode(int vertex)
  */
 void displayAdjacencyList(Graph *graph)
 {
-    // Implement the function logic here
+    // Loop over the adjacency list
+    for (int i = 0; i < graph->numVertices; i++)
+    {
+        printf("%d: ", i);
+        Node *current = graph->adjList[i];
+        while(current != NULL){
+            printf("-> %d ", current->vertex);
+            current = current->next;
+        }
+        printf("NULL\n");
+    }
 }
 
 /**
@@ -50,7 +102,18 @@ void displayAdjacencyList(Graph *graph)
  */
 void createAdjacencyList(Graph *graph)
 {
-    // Implement the function logic here
+    // Loop over the rows of the adjacency matrix
+    for (int i = 0; i < graph->numVertices; i++){
+        // Loop over the columns of the adjacency matrix
+        for (int j = 0; j < graph->numVertices; j++){
+            // If the value is not 0, add the edge to the graph list
+            if(graph->adjMatrix[i][j] != 0){
+                Node *newNode = createNode(j);
+                newNode->next = graph->adjList[i];
+                graph->adjList[i] = newNode;
+            }
+        }
+    }
 }
 
 /**
@@ -90,4 +153,26 @@ void dijkstra(Graph *graph, int startVertex)
 void freeGraph(Graph *graph)
 {
     // Implement the function logic here
+    
+}
+
+
+/**
+ * 
+ */
+
+int getNumVertices(const char *filename){
+    int numVertices = 0;
+    char line[256];
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        printf("Error opening file: %s\n", filename);
+        return -1;
+    }
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        numVertices++;
+    }
+    return numVertices;
 }

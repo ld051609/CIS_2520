@@ -38,4 +38,7 @@ void dfs(Graph *graph, int startVertex);
 void dijkstra(Graph *graph, int startVertex);
 void freeGraph(Graph *graph);
 
+// Helper functions
+int getNumVertices(const char *filename);
+
 #endif // GRAPH_H
