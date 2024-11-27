@@ -220,7 +220,61 @@ void dfs(Graph *graph, int startVertex)
  */
 void dijkstra(Graph *graph, int startVertex)
 {
-    // Implement the function logic here
+    // Initialize distance array
+    int *distance = (int *)malloc(graph->numVertices * sizeof(int));
+    if(distance){
+        for (int i = 0; i < graph->numVertices; i++)
+        {
+            distance[i] = INT_MAX;
+        }
+    }
+
+    // Intialize a queue of vertices
+    int queue[graph->numVertices];
+    int front = 0;
+    int rear = 0;
+
+    // Initialize previous array
+    int *previous = (int *)malloc(graph->numVertices * sizeof(int));
+    if(previous){
+        for (int i = 0; i < graph->numVertices; i++)
+        {
+            previous[i] = -1;
+        }
+    }
+
+    // Set the distance to the start vertex to 0
+    distance[startVertex] = 0;
+    queue[rear++] = startVertex; // Enqueue the start vertex
+
+    // Process the vertices until all vertices are processed
+    while(front < rear){
+        // Dequeue the front vertex
+        int currentVertex = queue[front++];
+
+        // Process the neighbors of the current vertex
+        Node *current = graph->adjList[currentVertex];
+        while(current != NULL){
+            int neighbor = current->vertex;
+            int weight = graph->adjMatrix[currentVertex][neighbor];
+
+            // Relax the edge if the new distance is shorter -> update distance and previous
+            if(distance[currentVertex] + weight < distance[neighbor]){
+                distance[neighbor] = distance[currentVertex] + weight;
+                previous[neighbor] = currentVertex;
+                queue[rear++] = neighbor; // Enqueue the neighbor
+            }
+        }
+
+    }
+    // Print out the distance
+    for (int i = 0; i < graph->numVertices; i++)
+    {
+        printf("Distance to vertex %d: %d\n", i, distance[i]);
+    }
+    // Free the allocated memory
+    free(distance);
+    free(previous);
 }
 
 /**
