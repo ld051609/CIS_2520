@@ -152,9 +152,13 @@ void createAdjacencyList(Graph *graph)
  */
 void bfs(Graph *graph, int startVertex)
 {
+    // Adjust startVertex to be 0-based
+    startVertex -= 1;
+
     // Initialize visited array
     bool *visitedIndex = (bool *)malloc(graph->numVertices * sizeof(bool));
-    if(visitedIndex){
+    if (visitedIndex)
+    {
         for (int i = 0; i < graph->numVertices; i++)
         {
             visitedIndex[i] = false;
@@ -171,16 +175,19 @@ void bfs(Graph *graph, int startVertex)
     visitedIndex[startVertex] = true;
 
     // Process the queue
-    while(front < rear){
+    while (front < rear)
+    {
         // Dequeue the front vertex
         int currentVertex = queue[front++];
-        printf("%d ", currentVertex); // Print the current vertex
+        printf("%d ", currentVertex + 1); // Print the current vertex (convert back to 1-based)
 
         // Process the neighbors of the current vertex
         Node *current = graph->adjList[currentVertex];
-        while(current != NULL){
+        while (current != NULL)
+        {
             int neighbor = current->vertex;
-            if(!visitedIndex[neighbor]){
+            if (!visitedIndex[neighbor])
+            {
                 queue[rear++] = neighbor; // Enqueue the neighbor
                 visitedIndex[neighbor] = true; // Mark the neighbor as visited
             }
@@ -189,7 +196,6 @@ void bfs(Graph *graph, int startVertex)
     }
     printf("\n");
     free(visitedIndex);
-
 }
 
 /**
@@ -199,6 +205,7 @@ void bfs(Graph *graph, int startVertex)
  */
 void dfs(Graph *graph, int startVertex)
 {
+    startVertex -= 1;
     // Initialize visited array
     bool *visitedIndex = (bool *)malloc(graph->numVertices * sizeof(bool));
     if(visitedIndex){
@@ -219,20 +226,18 @@ void dfs(Graph *graph, int startVertex)
     while(top >= 0){
         // Pop the top vertex
         int currentVertex = stack[top--];
-        printf("%d ", currentVertex); // Print the current vertex
+        printf("%d ", currentVertex + 1); // Print the current vertex
 
         // Process the neighbors of the current vertex
-        if(!visitedIndex[currentVertex]){
-            printf("%d ", currentVertex);
-            visitedIndex[currentVertex] = true;
+        Node *current = graph->adjList[currentVertex];
 
-            // Push the neighbors of the current vertex
-            Node *current = graph->adjList[currentVertex];
-            while(current != NULL){
-                int neighbor = current->vertex;
-                if(!visitedIndex[neighbor]){
-                    stack[++top] = neighbor;
-                }
+        while(current != NULL){
+            int neighbor = current->vertex;
+            // DEBUG:
+            // printf("Neighbor: %d\n", neighbor + 1);
+            if(!visitedIndex[neighbor]){
+                stack[++top] = neighbor; // Push the neighbor onto the stack
+                visitedIndex[neighbor] = true; // Mark the neighbor as visited
             }
             current = current->next; // Move to the next neighbor
         }
