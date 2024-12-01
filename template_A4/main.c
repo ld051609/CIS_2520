@@ -6,6 +6,7 @@
 
 int main(int argc, char *argv[])
 {
+    
 
     if (argc != 2)
     {
@@ -13,8 +14,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    Graph *graph = readGraph(argv[1]);
+    createAdjacencyList(graph);
+
     int choice;
-    // int startVertex = 1;
+    // int startVertex = 0;
+    int startVertext = 1;
 
     do
     {
@@ -35,14 +40,30 @@ int main(int argc, char *argv[])
         switch (choice) {
             case 1:
                 // Code for case 1
+                displayAdjacencyList(graph);
                 break;
-
+            case 2:
+                // Code for case 2
+                bfs(graph, startVertext);
+                break;
+            case 3:
+                // Code for case 3
+                dfs(graph, startVertext);
+                break;
+            case 4:
+                // Code for case 4
+                dijkstra(graph, startVertext);
+                break;
+            case 5:
+                printf("Exiting...\n");
+                break;
             default:
                 // Code for default case
                 break;
         }
 
     } while (true);
+    freeGraph(graph); 
 
     return 0;
 }

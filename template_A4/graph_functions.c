@@ -55,6 +55,15 @@ Graph *readGraph(const char *filename)
         graph->adjList[i] = NULL;
     }
 
+    // Read the adjacency matrix from the file
+    for (int i = 0; i < numVertices; i++)
+    {
+        for (int j = 0; j < numVertices; j++)
+        {
+            fscanf(file, "%d", &graph->adjMatrix[i][j]);
+        }
+    }
+
     fclose(file);
     return graph;
 }
@@ -86,11 +95,12 @@ void displayAdjacencyList(Graph *graph)
     // Loop over the adjacency list
     for (int i = 0; i < graph->numVertices; i++)
     {
-        printf("%d: ", i);
+        printf("Vertex %d: ", i+1);
         Node *current = graph->adjList[i];
         while(current != NULL){
-            // Print the vertex number and the weight of the edge
-            printf("-> %d(%d) ", current->vertex, graph->adjMatrix[i][current->vertex]);
+            // DEBUG:
+            // Print the vertex number and the weight of the edge in reverse order
+            printf("-> %d (%d) ", current->vertex+1, graph->adjMatrix[i][current->vertex]);
             current = current->next;
         }
         printf("NULL\n");
@@ -110,8 +120,26 @@ void createAdjacencyList(Graph *graph)
             // If the value is not 0, add the edge to the graph list
             if(graph->adjMatrix[i][j] != 0){
                 Node *newNode = createNode(j);
-                newNode->next = graph->adjList[i];
-                graph->adjList[i] = newNode;
+                if(!newNode){
+                    printf("Error creating node.\n");
+                    return;
+                }
+
+                // Insert at the end of the list
+                if(graph->adjList[i] == NULL){
+                    graph->adjList[i] = newNode;
+                } else {
+                    Node *current = graph->adjList[i];
+                    while(current->next != NULL){
+                        current = current->next;
+                    }
+                    current->next = newNode;
+                }
+
+                // newNode->next = graph->adjList[i];
+                // graph->adjList[i] = newNode;
+
+                
             }
         }
     }
